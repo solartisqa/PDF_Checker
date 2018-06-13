@@ -1,4 +1,4 @@
-package PDF_Checker.PDF_Checker;
+package com.solartis.test.PDF_Checker;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;

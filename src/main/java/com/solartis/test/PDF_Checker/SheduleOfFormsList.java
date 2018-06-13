@@ -1,4 +1,4 @@
-package PDF_Checker.PDF_Checker;
+package com.solartis.test.PDF_Checker;
 
 public class SheduleOfFormsList 
 {

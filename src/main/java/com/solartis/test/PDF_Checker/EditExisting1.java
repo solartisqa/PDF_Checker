@@ -1,4 +1,4 @@
-package PDF_Checker.PDF_Checker;
+package com.solartis.test.PDF_Checker;
 
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
