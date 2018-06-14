@@ -26,26 +26,29 @@ public class StarrGLPDFChecker
     {
     	int i=0;
     	formsList = new LinkedHashMap<Integer,SheduleOfFormsList>();
-    	LinkedHashMap<Integer, LinkedHashMap<String, String>> ConfigTable = DB.GetDataObjects("SELECT * FROM `FormsConditionTable` GROUP BY FormDescription ORDER BY PrintOrder");//config.getProperty("OutputColQuery"));		
+    	DB.switchDB(config.getProperty("ProjectDBName"));
+    	LinkedHashMap<Integer, LinkedHashMap<String, String>> ConfigTable = DB.GetDataObjects("SELECT * FROM `"+config.getProperty("FormsMappingTable")+"` GROUP BY FormDescription ORDER BY PrintOrder");//config.getProperty("OutputColQuery"));		
 		for (Entry<Integer, LinkedHashMap<String, String>> entry : ConfigTable.entrySet())	
 		{
 			LinkedHashMap<String, String> ConfigTableRow = entry.getValue();
-			i+=1;
-			formsList.put(i, new SheduleOfFormsList(ConfigTableRow.get("FormNumber"),ConfigTableRow.get("FormEdition"),ConfigTableRow.get("FormDescription"),ConfigTableRow.get("SheduleofFormsFlag")));
-			
+			if(ConfigTableRow.get("FlagForExecution").equalsIgnoreCase("Y"))
+			{
+				i+=1;
+				formsList.put(i, new SheduleOfFormsList(ConfigTableRow.get("FormNumber"),ConfigTableRow.get("FormEdition"),ConfigTableRow.get("FormDescription"),ConfigTableRow.get("SheduleofFormsFlag")));
+			}
 		}
 		return formsList;
 		
     }
     
-    public void pumpDatatoForms(LinkedHashMap<Integer,SheduleOfFormsList> formsList,LinkedHashMap<String, String> inputOutputrow) throws DatabaseException
+    public void pumpDatatoForms(LinkedHashMap<Integer,SheduleOfFormsList> formsList,LinkedHashMap<String, String> inputOutputrow, PropertiesHandle config) throws DatabaseException
     {
     	for (Entry<Integer,SheduleOfFormsList> entryy : formsList.entrySet())	
 		{
     		SheduleOfFormsList formlist=entryy.getValue();
-    		pdf.openPDF("Q:\\Manual Testing\\Starr\\Starr-GL\\FormsTemplate\\All Forms\\"+formlist.getFormDescription()+".pdf", "Q:\\Manual Testing\\Starr\\Starr-GL\\FormsTemplate\\All Forms\\SIIL C 001 (0517) Starr Certificate of Commercial Liability Insurance_edited.pdf");
+    		pdf.openPDF("Q:\\Manual Testing\\Starr\\Starr-GL\\FormsTemplate\\All Forms\\"+formlist.getFormDescription()+".pdf", "E:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-GL\\PDFs\\PolicyPDF\\temp\\"+formlist.getFormDescription()+".pdf");
 	    	
-    		LinkedHashMap<Integer, LinkedHashMap<String, String>> ConfigTable = DB.GetDataObjects("Select * from table where FormDescription = '"+formlist.getFormDescription()+"'");		
+    		LinkedHashMap<Integer, LinkedHashMap<String, String>> ConfigTable = DB.GetDataObjects("Select * from `"+config.getProperty("FormsMappingTable")+"` where FormDescription = '"+formlist.getFormDescription()+"'");		
 			for (Entry<Integer, LinkedHashMap<String, String>> entry : ConfigTable.entrySet())	
 			{
 				LinkedHashMap<String, String> ConfigTableRow = entry.getValue();

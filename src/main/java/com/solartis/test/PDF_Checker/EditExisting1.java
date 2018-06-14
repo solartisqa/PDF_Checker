@@ -5,21 +5,26 @@ import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.action.PdfAction;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Tab;
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfCopy;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfSmartCopy;
 import com.itextpdf.text.pdf.PdfStamper;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import org.apache.commons.io.FileUtils;
 
 public class EditExisting1 {
 	private PdfReader pdfReaderr;
@@ -92,23 +97,24 @@ public class EditExisting1 {
 	{
 		 try 
 		 {
+			 System.out.println(llx+"=----"+lly+"-----"+urx+"------"+ury+"------"+Text);
 			// Here we define the location:
-		    Rectangle linkLocation = new Rectangle(llx, 695, 560, 741);
+		    Rectangle linkLocation = new Rectangle(llx, lly, urx, ury);
 		    
 		    // here we add the actual content at this location:
 		    ColumnText ct = new ColumnText(pdfStampers.getOverContent(pageNumber));
 		    Paragraph para = new Paragraph();
-		    Font font = new Font();
+		    
+		    BaseFont arial = BaseFont.createFont("E:\\RestFullAPIDeliverable\\Fonts\\arial.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+		    Font font = new Font(arial,11f,Font.NORMAL,BaseColor.BLACK);
 		    font.setSize(11);
-		    font.setFamily("TIMES_NEW_ROMAN");
 		    para.add(Text);
 		    para.setFont(font);//FontFamily.TIMES_ROMAN);
 		    ct.setSimpleColumn(linkLocation);
-		    ct.addElement(para);
-		   
+		    ct.addElement(para);		   
 			ct.go();		
 		
-		} catch (DocumentException e) {
+		} catch (DocumentException | IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -158,12 +164,13 @@ public class EditExisting1 {
         PdfReader[] reader = new PdfReader[files.size()];
         for(int i=1;i<=files.size();i++) 
         {
-            reader[i-1] = new PdfReader(files.get(i).getFormDescription());
+            reader[i-1] = new PdfReader("E:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-GL\\PDFs\\PolicyPDF\\temp\\"+files.get(i).getFormDescription()+".pdf");
             copy.addDocument(reader[i-1]);
             copy.freeReader(reader[i-1]);
             reader[i-1].close();
         }
         document.close();
+        deleteFileFromDirectory("E:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-GL\\PDFs\\PolicyPDF\\temp\\"); 
     }
 	
 	public void SheduleOfForms(LinkedHashMap<Integer,SheduleOfFormsList> formsList,String SheduleFormPath) 
@@ -199,5 +206,22 @@ public class EditExisting1 {
 		trial1.feedInData(1, 300, 600, 400, 600, "My trial text");
 		trial1.feedInData(2, 100, 200, 300, 300, "My trial text2");
 		trial1.closePDF();
+	}
+	
+	public  static void deleteFileFromDirectory(String DirName)
+	{
+		File directory = new File(DirName);
+
+		File[] files = directory.listFiles();
+
+		for (File file : files)
+
+		{
+	 
+			if (!file.delete())
+			{ 
+				System.out.println("Failed to delete "+file);
+			}
+		} 
 	}
 }

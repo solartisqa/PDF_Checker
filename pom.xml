@@ -16,13 +16,28 @@
     <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
 
-  <dependencies>
+  <dependencies>  
+      <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+	<dependency>
+    	<groupId>mysql</groupId>
+    	<artifactId>mysql-connector-java</artifactId>
+    	<version>5.1.6</version>
+	</dependency>
+	
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+    
+    <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+<dependency>
+    <groupId>commons-io</groupId>
+    <artifactId>commons-io</artifactId>
+    <version>2.6</version>
+</dependency>
+    
     
     <!-- https://mvnrepository.com/artifact/com.itextpdf/itextpdf -->
 	<dependency>
@@ -52,13 +67,6 @@
     <groupId>com.itextpdf</groupId>
     <artifactId>itext-asian</artifactId>
     <version>5.2.0</version>
-</dependency>
-    
-    <!-- https://mvnrepository.com/artifact/com.itextpdf/kernel -->
-<dependency>
-    <groupId>com.itextpdf</groupId>
-    <artifactId>kernel</artifactId>
-    <version>7.1.2</version>
 </dependency>
     
     <!-- https://mvnrepository.com/artifact/com.itextpdf/layout -->
@@ -100,4 +108,54 @@
 </dependency>
     
   </dependencies>
+  
+  <build>
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <plugins>
+            
+            <plugin>
+  				<groupId>org.apache.maven.plugins</groupId>
+ 				<artifactId>maven-assembly-plugin</artifactId>
+  				<executions>
+    				<execution>
+      					<phase>package</phase>
+      					<goals>
+       				    	<goal>single</goal>
+    				    </goals>
+      					<configuration>
+        					<archive>
+          						<manifest>
+            						<mainClass>com.solartis.test.PDF_Checker.MainClass</mainClass>
+          						</manifest>
+        					</archive>
+        					<descriptorRefs>
+          						<descriptorRef>jar-with-dependencies</descriptorRef>
+        					</descriptorRefs>
+      					</configuration>
+    				</execution>
+  				</executions>
+			</plugin>
+            
+            <plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-surefire-plugin</artifactId>
+		        <version>2.20</version>
+		        <configuration>
+		        <testFailureIgnore>true</testFailureIgnore>
+   
+		          <systemPropertyVariables>
+		                       <Project>${Project}</Project>
+		                        <Api>${PDFName}</Api>
+		                        <UserName>${UserName}</UserName>
+		                        <JDBC_DRIVER>${JDBC_DRIVER}</JDBC_DRIVER>
+		                        <DB_URL>${DB_URL}</DB_URL>
+		                        <USER>${USER}</USER>
+		                        <password>${password}</password>
+		                        <ExecutionName>${ExecutionName}</ExecutionName>
+		          </systemPropertyVariables>
+		        </configuration>
+			</plugin>
+        </plugins>
+    </build>
+  
 </project>
