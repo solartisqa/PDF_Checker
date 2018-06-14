@@ -16,11 +16,18 @@ import com.itextpdf.text.pdf.PdfCopy;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfSmartCopy;
 import com.itextpdf.text.pdf.PdfStamper;
+import com.testautomationguru.utility.CompareMode;
+import com.testautomationguru.utility.PDFUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -200,14 +207,7 @@ public class EditExisting1 {
 		}
 	}
 	
-	public static void main(String[] args) {
-		EditExisting1 trial1 = new EditExisting1();
-		trial1.openPDF("Q:\\Manual Testing\\Starr\\Starr-GL\\FormsTemplate\\All Forms\\SIIL C 001 (0517) Starr Certificate of Commercial Liability Insurance.pdf", "Q:\\Manual Testing\\Starr\\Starr-GL\\FormsTemplate\\All Forms\\SIIL C 001 (0517) Starr Certificate of Commercial Liability Insurance_edited.pdf");
-		trial1.feedInData(1, 300, 600, 400, 600, "My trial text");
-		trial1.feedInData(2, 100, 200, 300, 300, "My trial text2");
-		trial1.closePDF();
-	}
-	
+		
 	public  static void deleteFileFromDirectory(String DirName)
 	{
 		File directory = new File(DirName);
@@ -223,5 +223,81 @@ public class EditExisting1 {
 				System.out.println("Failed to delete "+file);
 			}
 		} 
+	}
+	public static boolean successful;
+	public String comparePDFVisually(String PDF1path,String PDF2path, String Resultpath) throws IOException
+	{
+		java.util.logging.Logger.getLogger("org.apache.pdfbox").setLevel(java.util.logging.Level.OFF);
+		java.util.logging.Logger.getLogger("com.testautomationguru").setLevel(java.util.logging.Level.OFF);
+		String result = null;
+		
+		PDFUtil pdfUtil = new PDFUtil();
+	    pdfUtil.setCompareMode(CompareMode.VISUAL_MODE);
+	    pdfUtil.highlightPdfDifference(true);
+	    
+	    int Expected_PageCount=pdfUtil.getPageCount(PDF1path);    
+	    int Autual_PageCount=pdfUtil.getPageCount(PDF2path); 
+	    
+	    if(Expected_PageCount==Autual_PageCount)
+	    {
+	    	File dir = new File(Resultpath);
+	            if (! dir.exists())
+	            {
+	                 successful = dir.mkdir();
+	            }
+	            else
+	            {
+	                System.out.println("Clearing all Past Datas from "+dir);
+	                FileUtils.cleanDirectory(dir);
+	                successful = true;
+	            }
+	           
+	            if (successful)
+	            {
+	            	pdfUtil.setImageDestinationPath(Resultpath);
+	    		    boolean isEqual=pdfUtil.compare(PDF1path, PDF2path, 1, Expected_PageCount, true, true);
+	    		    if(!isEqual)
+	    	        {
+	    	            System.out.println("Difference found in PDFs");
+	    	            result = "Fail";
+	    	        }
+	    	        else
+	    	        {
+	    	            System.out.println("Difference not found in PDFs");
+	    	            result = "Pass";
+	    	        }
+	      }
+	      else
+	      {
+	         System.out.println("Directory is not present");
+	      } 
+	        
+	    }
+	    else
+	    {
+	    	System.out.println("Count of PDF Pages are different");
+            result = "PageCountError";
+	    }
+        return result;
+	}
+	
+	public void urltopdf(String URL,String path) throws IOException
+	{
+		System.setProperty("jsse.enableSNIExtension", "false");	
+		URL website = new URL(URL);
+		Path targetPath = new File(path+".pdf").toPath();
+		InputStream in = website.openStream();		
+		Files.copy(in, targetPath, StandardCopyOption.REPLACE_EXISTING);		
+	}
+	
+	public static void main(String[] args) throws IOException {
+		EditExisting1 trial1 = new EditExisting1();
+/*		trial1.openPDF("Q:\\Manual Testing\\Starr\\Starr-GL\\FormsTemplate\\All Forms\\SIIL C 001 (0517) Starr Certificate of Commercial Liability Insurance.pdf", "Q:\\Manual Testing\\Starr\\Starr-GL\\FormsTemplate\\All Forms\\SIIL C 001 (0517) Starr Certificate of Commercial Liability Insurance_edited.pdf");
+		trial1.feedInData(1, 300, 600, 400, 600, "My trial text");
+		trial1.feedInData(2, 100, 200, 300, 300, "My trial text2");
+		trial1.closePDF();*/
+		trial1.comparePDFVisually("Q:\\Manual Testing\\Starr\\Starr-GL\\FormsTemplate\\All Forms\\SIIL C 001 (0517) Starr Certificate of Commercial Liability Insurance.pdf",
+				"Q:\\Manual Testing\\Starr\\Starr-GL\\FormsTemplate\\All Forms\\SIIL C 001 (0517) Starr Certificate of Commercial Liability Insurance_edited.pdf",
+				"Q:\\Manual Testing\\Starr\\Starr-GL\\FormsTemplate\\All Forms\\resutlt\\resutl\\");
 	}
 }

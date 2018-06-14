@@ -38,6 +38,12 @@
     <version>2.6</version>
 </dependency>
     
+     	 <!-- https://mvnrepository.com/artifact/com.testautomationguru.pdfutil/pdf-util -->
+	<dependency>
+	    <groupId>com.testautomationguru.pdfutil</groupId>
+	    <artifactId>pdf-util</artifactId>
+	    <version>0.0.1</version>
+	</dependency>
     
     <!-- https://mvnrepository.com/artifact/com.itextpdf/itextpdf -->
 	<dependency>
