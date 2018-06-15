@@ -16,6 +16,7 @@ import com.itextpdf.text.pdf.PdfCopy;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfSmartCopy;
 import com.itextpdf.text.pdf.PdfStamper;
+import com.solartis.test.exception.PDFException;
 import com.solartis.test.exception.POIException;
 import com.testautomationguru.utility.CompareMode;
 import com.testautomationguru.utility.PDFUtil;
@@ -267,7 +268,7 @@ public class EditExisting1 {
 	}
 	
 	@SuppressWarnings("resource")
-	public void Copy(String SourcePath, String TargetPath) throws POIException
+	public void Copy(String SourcePath, String TargetPath) throws PDFException 
 	{
 		FileChannel source = null;
 		FileChannel destination = null;
@@ -287,11 +288,11 @@ public class EditExisting1 {
 		
 		catch (FileNotFoundException e) 
 		{
-			throw new POIException("ERROR OCCURS WHILE COPYING THE WORKBOOK -- FILENOTFOUND", e);
+			throw new PDFException("ERROR OCCURS WHILE COPYING THE WORKBOOK -- FILENOTFOUND", e);
 		} 
 		catch (IOException e)
 		{
-			throw new POIException("ERROR OCCURS WHILE COPYING THE WORKBOOK -- I/O OPERATION FAILED", e);
+			throw new PDFException("ERROR OCCURS WHILE COPYING THE WORKBOOK -- I/O OPERATION FAILED", e);
 		
 		}
 		finally 

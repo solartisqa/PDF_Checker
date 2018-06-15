@@ -8,12 +8,13 @@ import com.itextpdf.text.DocumentException;
 import com.solartis.common.DatabaseOperation;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.exception.DatabaseException;
+import com.solartis.test.exception.PDFException;
 import com.solartis.test.exception.PropertiesHandleException;
 
 public class MainClass 
 {
 	public static PropertiesHandle config; 
-	public static void main(String args[]) throws DatabaseException
+	public static void main(String args[]) throws DatabaseException, PDFException
 	{
 		System.setProperty("jsse.enableSNIExtension", "false");
 

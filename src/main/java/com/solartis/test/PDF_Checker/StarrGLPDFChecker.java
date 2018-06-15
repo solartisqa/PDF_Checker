@@ -8,6 +8,8 @@ import com.itextpdf.text.DocumentException;
 import com.solartis.common.DatabaseOperation;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.exception.DatabaseException;
+import com.solartis.test.exception.PDFException;
+import com.solartis.test.exception.POIException;
 
 public class StarrGLPDFChecker 
 {
@@ -34,36 +36,43 @@ public class StarrGLPDFChecker
 			if(ConfigTableRow.get("FlagForExecution").equalsIgnoreCase("Y"))
 			{
 				i+=1;
-				formsList.put(i, new SheduleOfFormsList(ConfigTableRow.get("FormNumber"),ConfigTableRow.get("FormEdition"),ConfigTableRow.get("FormDescription"),ConfigTableRow.get("SheduleofFormsFlag")));
+				formsList.put(i, new SheduleOfFormsList(ConfigTableRow.get("FormNumber"),ConfigTableRow.get("FormEdition"),ConfigTableRow.get("FormDescription"),ConfigTableRow.get("SheduleofFormsFlag"),ConfigTableRow.get("FormNature")));
 			}
 		}
 		return formsList;
 		
     }
     
-    public void pumpDatatoForms(LinkedHashMap<Integer,SheduleOfFormsList> formsList,LinkedHashMap<String, String> inputOutputrow, PropertiesHandle config) throws DatabaseException
+    public void pumpDatatoForms(LinkedHashMap<Integer,SheduleOfFormsList> formsList,LinkedHashMap<String, String> inputOutputrow, PropertiesHandle config) throws DatabaseException, PDFException
     {
     	for (Entry<Integer,SheduleOfFormsList> entryy : formsList.entrySet())	
 		{
     		SheduleOfFormsList formlist=entryy.getValue();
-    		pdf.openPDF("Q:\\Manual Testing\\Starr\\Starr-GL\\FormsTemplate\\All Forms\\"+formlist.getFormDescription()+".pdf", "E:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-GL\\PDFs\\PolicyPDF\\temp\\"+formlist.getFormDescription()+".pdf");
-	    	
-    		LinkedHashMap<Integer, LinkedHashMap<String, String>> ConfigTable = DB.GetDataObjects("Select * from `"+config.getProperty("FormsMappingTable")+"` where FormDescription = '"+formlist.getFormDescription()+"'");		
-			for (Entry<Integer, LinkedHashMap<String, String>> entry : ConfigTable.entrySet())	
-			{
-				LinkedHashMap<String, String> ConfigTableRow = entry.getValue();
-				
-				int PageNumber = Integer.parseInt(ConfigTableRow.get("PDFPageNumbertoFill"));
-				String[] coordinates = ConfigTableRow.get("PDFCoordinatestoFill").split(",");
-				
-				int llx=Integer.parseInt(coordinates[0]);	int lly=Integer.parseInt(coordinates[1]);				
-				int urx=Integer.parseInt(coordinates[2]);	int ury=Integer.parseInt(coordinates[3]);
-				
-				String data=inputOutputrow.get(ConfigTableRow.get("ColumnName"));
-				pdf.feedInData(PageNumber, llx, lly, urx, ury, data);
-				//pdf.feedInData(2, 100, 200, 300, 300, "My trial text2");				
-			}
-			pdf.closePDF();
+    		if(formlist.getFormNature().equalsIgnoreCase("dynamic"))
+    		{
+	    		pdf.openPDF("Q:\\Manual Testing\\Starr\\Starr-GL\\FormsTemplate\\All Forms\\"+formlist.getFormDescription()+".pdf", "E:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-GL\\PDFs\\PolicyPDF\\temp\\"+formlist.getFormDescription()+".pdf");
+		    	
+	    		LinkedHashMap<Integer, LinkedHashMap<String, String>> ConfigTable = DB.GetDataObjects("Select * from `"+config.getProperty("FormsMappingTable")+"` where FormDescription = '"+formlist.getFormDescription()+"'");		
+				for (Entry<Integer, LinkedHashMap<String, String>> entry : ConfigTable.entrySet())	
+				{
+					LinkedHashMap<String, String> ConfigTableRow = entry.getValue();
+					
+					int PageNumber = Integer.parseInt(ConfigTableRow.get("PDFPageNumbertoFill"));
+					String[] coordinates = ConfigTableRow.get("PDFCoordinatestoFill").split(",");
+					
+					int llx=Integer.parseInt(coordinates[0]);	int lly=Integer.parseInt(coordinates[1]);				
+					int urx=Integer.parseInt(coordinates[2]);	int ury=Integer.parseInt(coordinates[3]);
+					
+					String data=inputOutputrow.get(ConfigTableRow.get("ColumnName"));
+					pdf.feedInData(PageNumber, llx, lly, urx, ury, data);
+					//pdf.feedInData(2, 100, 200, 300, 300, "My trial text2");				
+				}
+				pdf.closePDF();
+    		}
+    		else
+    		{
+    			pdf.Copy("Q:\\Manual Testing\\Starr\\Starr-GL\\FormsTemplate\\All Forms\\"+formlist.getFormDescription()+".pdf", "E:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-GL\\PDFs\\PolicyPDF\\temp\\"+formlist.getFormDescription()+".pdf");
+    		}
 		}
     }
     
@@ -79,8 +88,8 @@ public class StarrGLPDFChecker
     public static void main(String args[]) throws IOException, DocumentException
     {
     	LinkedHashMap<Integer,SheduleOfFormsList> formsList = new LinkedHashMap<Integer,SheduleOfFormsList> ();
-    	formsList.put(1, new SheduleOfFormsList("number","editin","Q:\\Manual Testing\\Starr\\Starr-GL\\FormsTemplate\\All Forms\\SIIL C 001 (0517) Starr Certificate of Commercial Liability Insurance_edited.pdf",""));
-    	formsList.put(2, new SheduleOfFormsList("number","editin","Q:\\Manual Testing\\Starr\\Starr-GL\\FormsTemplate\\All Forms\\SIIL C 001 (0517) Starr Certificate of Commercial Liability Insurance.pdf",""));
+    	formsList.put(1, new SheduleOfFormsList("number","editin","Q:\\Manual Testing\\Starr\\Starr-GL\\FormsTemplate\\All Forms\\SIIL C 001 (0517) Starr Certificate of Commercial Liability Insurance_edited.pdf","","static"));
+    	formsList.put(2, new SheduleOfFormsList("number","editin","Q:\\Manual Testing\\Starr\\Starr-GL\\FormsTemplate\\All Forms\\SIIL C 001 (0517) Starr Certificate of Commercial Liability Insurance.pdf","","dynamic"));
     	StarrGLPDFChecker pdfcheck = new StarrGLPDFChecker();
     	pdfcheck.mergeForms(formsList, "Q:\\Manual Testing\\Starr\\Starr-GL\\FormsTemplate\\All Forms\\mergedform.pdf");
     			

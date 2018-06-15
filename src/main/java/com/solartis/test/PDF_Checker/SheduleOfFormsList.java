@@ -6,14 +6,17 @@ public class SheduleOfFormsList
 	private String formEdition;
 	private String formDescription;
 	private String SheduleofFormsFlag;
+	private String formNature;
 	
-	public SheduleOfFormsList(String formNumber,String formEdition,String formDescription, String SheduleofFormsFlag)
+
+
+	public SheduleOfFormsList(String formNumber,String formEdition,String formDescription, String SheduleofFormsFlag, String formNature)
 	{
 		this.formNumber=formNumber;
 		this.formEdition=formEdition;
 		this.formDescription=formDescription;
 		this.SheduleofFormsFlag=SheduleofFormsFlag;
-		
+		this.formNature=formNature;
 	}
 		
 	public String getSheduleofFormsFlag() {
@@ -41,6 +44,13 @@ public class SheduleOfFormsList
 	}
 	public void setFormDescription(String formDescription) {
 		this.formDescription = formDescription;
+	}
+	public String getFormNature() {
+		return formNature;
+	}
+
+	public void setFormNature(String formNature) {
+		this.formNature = formNature;
 	}
 	
 }
