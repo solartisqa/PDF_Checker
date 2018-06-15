@@ -16,15 +16,18 @@ import com.itextpdf.text.pdf.PdfCopy;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfSmartCopy;
 import com.itextpdf.text.pdf.PdfStamper;
+import com.solartis.test.exception.POIException;
 import com.testautomationguru.utility.CompareMode;
 import com.testautomationguru.utility.PDFUtil;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -127,33 +130,6 @@ public class EditExisting1 {
 	}
 	
 	
-	/*private void mergeForms(LinkedHashMap<String,PdfDocument> formList,String finalDocPath)
-	{
-		LinkedHashMap<String,PdfDocument> formlistt=
-		try 
-		{
-			PdfDocument doc = new PdfDocument(new PdfWriter(finalDocPath));
-			doc.initializeOutlines();
-			Document finalDoc = new Document(doc);
-			int n;
-			for(Map.Entry<String,PdfDocument> entry : formList.entrySet())
-			{
-				n = entry.getValue().getNumberOfPages();
-				for(int i=1;i<=n;i++)
-				{
-					entry.getValue().copyPagesTo(i,i,doc);
-				}
-			}
-			
-			for(PdfDocument srcDoc : formList.values())
-			{
-				srcDoc.close();
-			}
-			finalDoc.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-	}*/
 	
     public void mergeFiles(LinkedHashMap<Integer,SheduleOfFormsList> files, String result, boolean smart) throws IOException, DocumentException 
     {
@@ -288,6 +264,54 @@ public class EditExisting1 {
 		Path targetPath = new File(path+".pdf").toPath();
 		InputStream in = website.openStream();		
 		Files.copy(in, targetPath, StandardCopyOption.REPLACE_EXISTING);		
+	}
+	
+	@SuppressWarnings("resource")
+	public void Copy(String SourcePath, String TargetPath) throws POIException
+	{
+		FileChannel source = null;
+		FileChannel destination = null;
+
+		try 
+		{
+			source = new FileInputStream(SourcePath).getChannel();
+
+			destination = new FileOutputStream(TargetPath).getChannel();
+
+			if (destination != null && source != null) 
+			{
+				destination.transferFrom(source, 0, source.size());
+			}
+
+		}
+		
+		catch (FileNotFoundException e) 
+		{
+			throw new POIException("ERROR OCCURS WHILE COPYING THE WORKBOOK -- FILENOTFOUND", e);
+		} 
+		catch (IOException e)
+		{
+			throw new POIException("ERROR OCCURS WHILE COPYING THE WORKBOOK -- I/O OPERATION FAILED", e);
+		
+		}
+		finally 
+		{
+			try 
+			{
+				if (source != null) 
+				{					
+					source.close();					
+				}
+				if (destination != null) 
+				{					
+					destination.close();					
+				}
+			} 
+			catch (IOException e) 
+			{
+				e.printStackTrace();
+			}
+		}	
 	}
 	
 	public static void main(String[] args) throws IOException {
