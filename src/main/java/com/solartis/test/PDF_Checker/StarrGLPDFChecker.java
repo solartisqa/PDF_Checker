@@ -50,7 +50,7 @@ public class StarrGLPDFChecker
     		SheduleOfFormsList formlist=entryy.getValue();
     		if(formlist.getFormNature().equalsIgnoreCase("dynamic"))
     		{
-	    		pdf.openPDF("Q:\\Manual Testing\\Starr\\Starr-GL\\FormsTemplate\\All Forms\\"+formlist.getFormDescription()+".pdf", "E:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-GL\\PDFs\\PolicyPDF\\temp\\"+formlist.getFormDescription()+".pdf");
+	    		pdf.openPDF("E:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-GL\\PDFs\\PolicyPDF\\SampleTemplates\\"+formlist.getFormDescription()+".pdf", "E:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-GL\\PDFs\\PolicyPDF\\temp\\"+formlist.getFormDescription()+".pdf");
 		    	
 	    		LinkedHashMap<Integer, LinkedHashMap<String, String>> ConfigTable = DB.GetDataObjects("Select * from `"+config.getProperty("FormsMappingTable")+"` where FormDescription = '"+formlist.getFormDescription()+"'");		
 				for (Entry<Integer, LinkedHashMap<String, String>> entry : ConfigTable.entrySet())	
