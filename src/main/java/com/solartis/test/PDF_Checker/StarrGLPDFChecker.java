@@ -9,7 +9,6 @@ import com.solartis.common.DatabaseOperation;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.PDFException;
-import com.solartis.test.exception.POIException;
 
 public class StarrGLPDFChecker 
 {
@@ -56,7 +55,7 @@ public class StarrGLPDFChecker
 				for (Entry<Integer, LinkedHashMap<String, String>> entry : ConfigTable.entrySet())	
 				{
 					LinkedHashMap<String, String> ConfigTableRow = entry.getValue();
-					
+					System.out.println(ConfigTableRow.get("PDFPageNumbertoFill"));
 					int PageNumber = Integer.parseInt(ConfigTableRow.get("PDFPageNumbertoFill"));
 					String[] coordinates = ConfigTableRow.get("PDFCoordinatestoFill").split(",");
 					

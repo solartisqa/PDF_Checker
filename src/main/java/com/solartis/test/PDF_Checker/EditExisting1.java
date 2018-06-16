@@ -17,7 +17,6 @@ import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfSmartCopy;
 import com.itextpdf.text.pdf.PdfStamper;
 import com.solartis.test.exception.PDFException;
-import com.solartis.test.exception.POIException;
 import com.testautomationguru.utility.CompareMode;
 import com.testautomationguru.utility.PDFUtil;
 

@@ -27,7 +27,8 @@ public class MainClass
 			DatabaseOperation.ConnectionSetup(config);
 			System.out.println(config.getProperty("ProjectDBName"));
 			DB.switchDB(config.getProperty("ProjectDBName"));
-			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = DB.GetDataObjects("Select * from INPUT_Quote_GL_V6");		
+			LinkedHashMap<Integer, LinkedHashMap<String, String>> tableOutputColVerify = DB.GetDataObjects("SELECT * FROM `INPUT_Quote_GL_V6` INNER JOIN OTUPUT_Quote_GL_V6 on INPUT_Quote_GL_V6.`S.No`=OTUPUT_Quote_GL_V6.`S.No` INNER JOIN INPUT_GL_PolicyIssuance_V3 ON INPUT_Quote_GL_V6.`S.No`=INPUT_GL_PolicyIssuance_V3.`S.No` \r\n" + 
+					"INNER JOIN OUTPUT_GL_PolicyIssuance_V3 ON INPUT_Quote_GL_V6.`S.No`=OUTPUT_GL_PolicyIssuance_V3.`S.No`");		
 			for (Entry<Integer, LinkedHashMap<String, String>> entry : tableOutputColVerify.entrySet())	
 			{
 				LinkedHashMap<String, String> inputOutputRow = entry.getValue();
