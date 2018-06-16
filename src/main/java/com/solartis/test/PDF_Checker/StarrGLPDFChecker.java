@@ -71,7 +71,7 @@ public class StarrGLPDFChecker
     		}
     		else
     		{
-    			pdf.Copy("Q:\\Manual Testing\\Starr\\Starr-GL\\FormsTemplate\\All Forms\\"+formlist.getFormDescription()+".pdf", "E:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-GL\\PDFs\\PolicyPDF\\temp\\"+formlist.getFormDescription()+".pdf");
+    			pdf.Copy("E:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-GL\\PDFs\\PolicyPDF\\SampleTemplates\\"+formlist.getFormDescription()+".pdf", "E:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-GL\\PDFs\\PolicyPDF\\temp\\"+formlist.getFormDescription()+".pdf");
     		}
 		}
     }
