@@ -37,6 +37,7 @@ public class MainClass
 					LinkedHashMap<Integer,SheduleOfFormsList> files=checkGL.loadListofForms(config);
 					checkGL.pumpDatatoForms(files, inputOutputRow,config);
 					checkGL.mergeForms(files, "E:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-GL\\PDFs\\PolicyPDF\\Expected\\"+inputOutputRow.get("Testdata")+".pdf");
+					checkGL.comparePDFS(inputOutputRow);
 				}
 			}
 		} catch (DatabaseException | PropertiesHandleException | IOException | DocumentException e) {

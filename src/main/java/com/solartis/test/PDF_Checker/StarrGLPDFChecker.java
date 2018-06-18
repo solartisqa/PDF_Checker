@@ -13,13 +13,13 @@ import com.solartis.test.exception.PDFException;
 public class StarrGLPDFChecker 
 {
 	public LinkedHashMap<Integer,SheduleOfFormsList> formsList;
-	public EditExisting1 pdf;
+	public PDFUtilities pdf;
 	protected PropertiesHandle config = null;
 	protected DatabaseOperation DB;
 	
     public StarrGLPDFChecker()
     {
-    	pdf = new EditExisting1();
+    	pdf = new PDFUtilities();
     	DB=new DatabaseOperation();
     }
     
@@ -79,9 +79,9 @@ public class StarrGLPDFChecker
     {
     	pdf.mergeFiles(formsList, outputFilePath,true);
     }
-    public void comparePDFS()
+    public void comparePDFS(LinkedHashMap<String, String> inputOutputrow)
     {
-    	
+    	inputOutputrow.get("");
     }
     
     public static void main(String args[]) throws IOException, DocumentException

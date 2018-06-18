@@ -36,7 +36,7 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 
-public class EditExisting1 {
+public class PDFUtilities {
 	private PdfReader pdfReaderr;
 	public PdfStamper pdfStampers;
 	public PdfReader pdfReaders;
@@ -315,7 +315,7 @@ public class EditExisting1 {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		EditExisting1 trial1 = new EditExisting1();
+		PDFUtilities trial1 = new PDFUtilities();
 /*		trial1.openPDF("Q:\\Manual Testing\\Starr\\Starr-GL\\FormsTemplate\\All Forms\\SIIL C 001 (0517) Starr Certificate of Commercial Liability Insurance.pdf", "Q:\\Manual Testing\\Starr\\Starr-GL\\FormsTemplate\\All Forms\\SIIL C 001 (0517) Starr Certificate of Commercial Liability Insurance_edited.pdf");
 		trial1.feedInData(1, 300, 600, 400, 600, "My trial text");
 		trial1.feedInData(2, 100, 200, 300, 300, "My trial text2");
