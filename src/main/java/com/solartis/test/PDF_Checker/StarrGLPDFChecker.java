@@ -55,7 +55,7 @@ public class StarrGLPDFChecker
 				for (Entry<Integer, LinkedHashMap<String, String>> entry : ConfigTable.entrySet())	
 				{
 					LinkedHashMap<String, String> ConfigTableRow = entry.getValue();
-					System.out.println(ConfigTableRow.get("PDFPageNumbertoFill"));
+					//System.out.println(ConfigTableRow.get("PDFPageNumbertoFill"));
 					int PageNumber = Integer.parseInt(ConfigTableRow.get("PDFPageNumbertoFill"));
 					String[] coordinates = ConfigTableRow.get("PDFCoordinatestoFill").split(",");
 					
@@ -64,7 +64,6 @@ public class StarrGLPDFChecker
 					
 					String data=inputOutputrow.get(ConfigTableRow.get("ColumnName"));
 					pdf.feedInData(PageNumber, llx, lly, urx, ury, data);
-					//pdf.feedInData(2, 100, 200, 300, 300, "My trial text2");				
 				}
 				pdf.closePDF();
     		}
@@ -79,18 +78,35 @@ public class StarrGLPDFChecker
     {
     	pdf.mergeFiles(formsList, outputFilePath,true);
     }
-    public void comparePDFS(LinkedHashMap<String, String> inputOutputrow)
+    
+    public void generateActualPDF(LinkedHashMap<String, String> inputOutputrow, String ActualPDFPath) throws IOException
     {
-    	inputOutputrow.get("");
+    	pdf.urltopdf(inputOutputrow.get("ISSUANCE"), ActualPDFPath);
+    }
+    
+    public void comparePDFS(LinkedHashMap<String, String> inputOutputrow, String ActualPDFPath, String ExpectedPDFPath, String ScreenShotPath) throws IOException
+    {
+    	pdf.comparePDFVisually(ActualPDFPath, ExpectedPDFPath, ScreenShotPath);
+    }
+    
+    public void checkPDFPageSizes(String filePath, double width, double height) throws IOException
+    {
+    	pdf.checkPageSize(filePath, width, height);
+    }
+    
+    public void sheduleOfForms(LinkedHashMap<Integer,SheduleOfFormsList> formsList)
+    {
+    	//pdf.SheduleOfForms(formsList, "E:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-GL\\PDFs\\PolicyPDF\\SampleTemplates");
     }
     
     public static void main(String args[]) throws IOException, DocumentException
     {
     	LinkedHashMap<Integer,SheduleOfFormsList> formsList = new LinkedHashMap<Integer,SheduleOfFormsList> ();
-    	formsList.put(1, new SheduleOfFormsList("number","editin","Q:\\Manual Testing\\Starr\\Starr-GL\\FormsTemplate\\All Forms\\SIIL C 001 (0517) Starr Certificate of Commercial Liability Insurance_edited.pdf","","static"));
-    	formsList.put(2, new SheduleOfFormsList("number","editin","Q:\\Manual Testing\\Starr\\Starr-GL\\FormsTemplate\\All Forms\\SIIL C 001 (0517) Starr Certificate of Commercial Liability Insurance.pdf","","dynamic"));
+    	formsList.put(1, new SheduleOfFormsList("number","editin","SIIL C 001 (0517) Starr Certificate of Commercial Liability Insurance_edited.pdf","","static"));
+    	formsList.put(2, new SheduleOfFormsList("number","editin","SIIL C 001 (0517) Starr Certificate of Commercial Liability Insurance.pdf","","dynamic"));
     	StarrGLPDFChecker pdfcheck = new StarrGLPDFChecker();
-    	pdfcheck.mergeForms(formsList, "Q:\\Manual Testing\\Starr\\Starr-GL\\FormsTemplate\\All Forms\\mergedform.pdf");
+    	//pdfcheck.mergeForms(formsList, "Q:\\Manual Testing\\Starr\\Starr-GL\\FormsTemplate\\All Forms\\mergedform.pdf");
+    	pdfcheck.sheduleOfForms(formsList);
     			
     }
     

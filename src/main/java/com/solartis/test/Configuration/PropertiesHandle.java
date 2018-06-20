@@ -64,6 +64,7 @@ public class PropertiesHandle extends Properties
 			this.put("db_url", DB_URL);
 			this.put("db_username", USER);
 			this.put("db_password", password);
+			this.put("inputOutputTableQuery", RdmsValue("Query"));
 		    DatabaseOperation.CloseConn();		 
 		}
 		
