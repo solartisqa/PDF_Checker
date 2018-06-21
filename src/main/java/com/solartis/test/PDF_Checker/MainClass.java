@@ -1,6 +1,8 @@
 package com.solartis.test.PDF_Checker;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
@@ -13,21 +15,27 @@ import com.solartis.test.exception.PropertiesHandleException;
 
 public class MainClass 
 {
+	static StarrGLPDFChecker checkGL;
 	public static PropertiesHandle config; 
 	public static void main(String args[]) throws DatabaseException, PDFException
 	{
 		System.setProperty("jsse.enableSNIExtension", "false");
-		String BaseProjectFolder="E:\\RestFullAPIDeliverable\\Devolpement\\admin\\";
-		String ProjectName=System.getProperty("Project");
-		String PDFName=System.getProperty("PDFName");
-		String ActualPDFPath = BaseProjectFolder+ProjectName+"\\PDFs\\"+PDFName+"\\Actual\\";
-		String ExpectedPDFPath =BaseProjectFolder+ProjectName+"\\PDFs\\"+PDFName+"\\Expected\\";
-		String ScreenShotPath = BaseProjectFolder+ProjectName+"\\PDFs\\"+PDFName+"\\Result\\ScreenShots\\";
+		String BaseProjectFolder 	= "E:\\RestFullAPIDeliverable\\Devolpement\\admin\\";
+		String ProjectName			= System.getProperty("Project");
+		String PDFName				= System.getProperty("PDFName");
+		String ActualPDFPath 		= BaseProjectFolder+ProjectName+"\\PDFs\\"+PDFName+"\\Actual\\";
+		String ExpectedPDFPath 		= BaseProjectFolder+ProjectName+"\\PDFs\\"+PDFName+"\\Expected\\";
+		String ScreenShotPath 		= BaseProjectFolder+ProjectName+"\\PDFs\\"+PDFName+"\\Result\\ScreenShots\\";
+		String SampleTemplatePath 	= BaseProjectFolder+ProjectName+"\\PDFs\\"+PDFName+"\\SampleTemplates\\";
+		String TempPath				= BaseProjectFolder+ProjectName+"\\PDFs\\"+PDFName+"\\temp\\";
 		try 
 		{
 			//config = new PropertiesHandle("Starr-SGL","PolicyPDF","Admin", "com.mysql.jdbc.Driver", "jdbc:mysql://192.168.84.225:3700/Starr_Config_Development","root","redhat","rerun");
 			config = new PropertiesHandle(ProjectName, PDFName, System.getProperty("UserName"), System.getProperty("JDBC_DRIVER"), System.getProperty("DB_URL"), System.getProperty("USER"), System.getProperty("password"),System.getProperty("ExecutionName"));
-			StarrGLPDFChecker checkGL = new StarrGLPDFChecker();
+			String classname = "";
+			Class<?> cl = Class.forName("com.solartis.test.apiPackage."+classname);
+			Constructor<?> cons = cl.getConstructor(com.solartis.test.Configuration.PropertiesHandle.class);
+			checkGL =  (StarrGLPDFChecker) cons.newInstance(config);			
 			DatabaseOperation DB = new DatabaseOperation();
 			DatabaseOperation.ConnectionSetup(config);
 			System.out.println(config.getProperty("ProjectDBName"));
@@ -39,15 +47,17 @@ public class MainClass
 				if(inputOutputRow.get("Flag_for_execution").equals("Y"))
 				{
 					LinkedHashMap<Integer,SheduleOfFormsList> files=checkGL.loadListofForms(config);
-					checkGL.pumpDatatoForms(files, inputOutputRow,config);
-					checkGL.mergeForms(files,ExpectedPDFPath+inputOutputRow.get("Testdata")+".pdf");
+					checkGL.pumpDatatoForms(files, inputOutputRow,config,SampleTemplatePath,TempPath);
+					checkGL.mergeForms(files,ExpectedPDFPath+inputOutputRow.get("Testdata")+".pdf",TempPath);
 					checkGL.generateActualPDF(inputOutputRow,ActualPDFPath+inputOutputRow.get("Testdata")+".pdf");
 					checkGL.checkPDFPageSizes(ActualPDFPath+inputOutputRow.get("Testdata")+".pdf", 8.5, 11);
 					checkGL.comparePDFS(inputOutputRow,ActualPDFPath+inputOutputRow.get("Testdata")+".pdf",
 							ExpectedPDFPath+inputOutputRow.get("Testdata")+".pdf", ScreenShotPath);
 				}
 			}
-		} catch (DatabaseException | PropertiesHandleException | IOException | DocumentException e) {
+		} 
+		catch (DatabaseException | PropertiesHandleException | IOException | DocumentException | ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) 
+		{
 			DatabaseOperation.CloseConn();
 			e.printStackTrace();
 		}

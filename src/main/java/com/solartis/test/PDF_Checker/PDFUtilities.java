@@ -132,7 +132,7 @@ public class PDFUtilities {
 	
 	
 	
-    public void mergeFiles(LinkedHashMap<Integer,SheduleOfFormsList> files, String result, boolean smart) throws IOException, DocumentException 
+    public void mergeFiles(LinkedHashMap<Integer,SheduleOfFormsList> files, String result, boolean smart,String TempPath) throws IOException, DocumentException 
     {
     	com.itextpdf.text.Document document = new com.itextpdf.text.Document();
         PdfCopy copy;
@@ -148,13 +148,13 @@ public class PDFUtilities {
         PdfReader[] reader = new PdfReader[files.size()];
         for(int i=1;i<=files.size();i++) 
         {
-            reader[i-1] = new PdfReader("E:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-GL\\PDFs\\PolicyPDF\\temp\\"+files.get(i).getFormDescription()+".pdf");
+            reader[i-1] = new PdfReader(TempPath+files.get(i).getFormDescription()+".pdf");
             copy.addDocument(reader[i-1]);
             copy.freeReader(reader[i-1]);
             reader[i-1].close();
         }
         document.close();
-        deleteFileFromDirectory("E:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-GL\\PDFs\\PolicyPDF\\temp\\"); 
+        deleteFileFromDirectory(TempPath); 
     }
 	
 	

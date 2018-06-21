@@ -42,14 +42,14 @@ public class StarrGLPDFChecker
 		
     }
     
-    public void pumpDatatoForms(LinkedHashMap<Integer,SheduleOfFormsList> formsList,LinkedHashMap<String, String> inputOutputrow, PropertiesHandle config) throws DatabaseException, PDFException
+    public void pumpDatatoForms(LinkedHashMap<Integer,SheduleOfFormsList> formsList,LinkedHashMap<String, String> inputOutputrow, PropertiesHandle config, String SampleLocation, String TempLocation) throws DatabaseException, PDFException
     {
     	for (Entry<Integer,SheduleOfFormsList> entryy : formsList.entrySet())	
 		{
     		SheduleOfFormsList formlist=entryy.getValue();
     		if(formlist.getFormNature().equalsIgnoreCase("dynamic"))
     		{
-	    		pdf.openPDF("E:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-GL\\PDFs\\PolicyPDF\\SampleTemplates\\"+formlist.getFormDescription()+".pdf", "E:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-GL\\PDFs\\PolicyPDF\\temp\\"+formlist.getFormDescription()+".pdf");
+	    		pdf.openPDF(SampleLocation+formlist.getFormDescription()+".pdf", TempLocation+formlist.getFormDescription()+".pdf");
 		    	
 	    		LinkedHashMap<Integer, LinkedHashMap<String, String>> ConfigTable = DB.GetDataObjects("Select * from `"+config.getProperty("FormsMappingTable")+"` where FormDescription = '"+formlist.getFormDescription()+"'");		
 				for (Entry<Integer, LinkedHashMap<String, String>> entry : ConfigTable.entrySet())	
@@ -69,14 +69,14 @@ public class StarrGLPDFChecker
     		}
     		else
     		{
-    			pdf.Copy("E:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-GL\\PDFs\\PolicyPDF\\SampleTemplates\\"+formlist.getFormDescription()+".pdf", "E:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-GL\\PDFs\\PolicyPDF\\temp\\"+formlist.getFormDescription()+".pdf");
+    			pdf.Copy(SampleLocation+formlist.getFormDescription()+".pdf", TempLocation+formlist.getFormDescription()+".pdf");
     		}
 		}
     }
     
-    public void mergeForms(LinkedHashMap<Integer,SheduleOfFormsList> formsList,String outputFilePath) throws IOException, DocumentException
+    public void mergeForms(LinkedHashMap<Integer,SheduleOfFormsList> formsList,String outputFilePath, String TempPath) throws IOException, DocumentException
     {
-    	pdf.mergeFiles(formsList, outputFilePath,true);
+    	pdf.mergeFiles(formsList, outputFilePath,true,TempPath);
     }
     
     public void generateActualPDF(LinkedHashMap<String, String> inputOutputrow, String ActualPDFPath) throws IOException
