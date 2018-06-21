@@ -32,10 +32,10 @@ public class MainClass
 		{
 			//config = new PropertiesHandle("Starr-SGL","PolicyPDF","Admin", "com.mysql.jdbc.Driver", "jdbc:mysql://192.168.84.225:3700/Starr_Config_Development","root","redhat","rerun");
 			config = new PropertiesHandle(ProjectName, PDFName, System.getProperty("UserName"), System.getProperty("JDBC_DRIVER"), System.getProperty("DB_URL"), System.getProperty("USER"), System.getProperty("password"),System.getProperty("ExecutionName"));
-			String classname = "";
-			Class<?> cl = Class.forName("com.solartis.test.apiPackage."+classname);
-			Constructor<?> cons = cl.getConstructor(com.solartis.test.Configuration.PropertiesHandle.class);
-			checkGL =  (StarrGLPDFChecker) cons.newInstance(config);			
+			String classname = "com.solartis.test.PDF_Checker."+config.getProperty("ClassName");
+			Class<?> cl = Class.forName(classname);
+			Constructor<?> cons = cl.getConstructor();
+			checkGL =  (StarrGLPDFChecker) cons.newInstance();			
 			DatabaseOperation DB = new DatabaseOperation();
 			DatabaseOperation.ConnectionSetup(config);
 			System.out.println(config.getProperty("ProjectDBName"));
