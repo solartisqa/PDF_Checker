@@ -7,13 +7,14 @@ import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
 import com.itextpdf.text.DocumentException;
+import com.solartis.common.DBColoumnVerify;
 import com.solartis.common.DatabaseOperation;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.exception.DatabaseException;
 import com.solartis.test.exception.PDFException;
 import com.solartis.test.exception.PropertiesHandleException;
 
-public class MainClass 
+public class MainClass
 {
 	static StarrGLPDFChecker checkGL;
 	public static PropertiesHandle config; 
@@ -46,7 +47,7 @@ public class MainClass
 				LinkedHashMap<String, String> inputOutputRow = entry.getValue();
 				if(inputOutputRow.get("Flag_for_execution").equals("Y"))
 				{
-					LinkedHashMap<Integer,SheduleOfFormsList> files=checkGL.loadListofForms(config);
+					LinkedHashMap<Integer,SheduleOfFormsList> files=checkGL.loadListofForms(config,inputOutputRow);
 					checkGL.pumpDatatoForms(files, inputOutputRow,config,SampleTemplatePath,TempPath);
 					checkGL.mergeForms(files,ExpectedPDFPath+inputOutputRow.get("Testdata")+".pdf",TempPath);
 					checkGL.generateActualPDF(inputOutputRow,ActualPDFPath+inputOutputRow.get("Testdata")+".pdf");

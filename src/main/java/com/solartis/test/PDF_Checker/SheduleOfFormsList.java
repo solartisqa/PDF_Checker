@@ -7,16 +7,19 @@ public class SheduleOfFormsList
 	private String formDescription;
 	private String SheduleofFormsFlag;
 	private String formNature;
-	
+	private String formID;
+	private String formFileName;
 
-
-	public SheduleOfFormsList(String formNumber,String formEdition,String formDescription, String SheduleofFormsFlag, String formNature)
+	public SheduleOfFormsList(String formNumber,String formEdition,String formDescription, String SheduleofFormsFlag, String formNature,String formID,String formFileName)
 	{
 		this.formNumber=formNumber;
 		this.formEdition=formEdition;
 		this.formDescription=formDescription;
 		this.SheduleofFormsFlag=SheduleofFormsFlag;
 		this.formNature=formNature;
+		this.formID=formID;
+		this.formFileName=formFileName;
+		
 	}
 		
 	public String getSheduleofFormsFlag() {
@@ -53,4 +56,19 @@ public class SheduleOfFormsList
 		this.formNature = formNature;
 	}
 	
+	public String getFormID() {
+		return formID;
+	}
+
+	public void setFormID(String formID) {
+		this.formID = formID;
+	}
+
+	public String getFormFileName() {
+		return formFileName;
+	}
+
+	public void setFormFileName(String formFileName) {
+		this.formFileName = formFileName;
+	}
 }
