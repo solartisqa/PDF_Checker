@@ -148,7 +148,7 @@ public class PDFUtilities {
         PdfReader[] reader = new PdfReader[files.size()];
         for(int i=1;i<=files.size();i++) 
         {
-            reader[i-1] = new PdfReader(TempPath+files.get(i).getFormDescription()+".pdf");
+            reader[i-1] = new PdfReader(TempPath+files.get(i).getFormFileName()+".pdf");
             copy.addDocument(reader[i-1]);
             copy.freeReader(reader[i-1]);
             reader[i-1].close();
@@ -176,7 +176,7 @@ public class PDFUtilities {
 		} 
 	}
 	public static boolean successful;
-	public String comparePDFVisually(String PDF1path,String PDF2path, String Resultpath) throws IOException
+	public String comparePDFVisually(String PDF1path,String PDF2path, String Resultpath, String TestCaseName) throws IOException
 	{
 		java.util.logging.Logger.getLogger("org.apache.pdfbox").setLevel(java.util.logging.Level.OFF);
 		java.util.logging.Logger.getLogger("com.testautomationguru").setLevel(java.util.logging.Level.OFF);
@@ -190,7 +190,7 @@ public class PDFUtilities {
 	    int Autual_PageCount=pdfUtil.getPageCount(PDF2path);
 	    if(Expected_PageCount==Autual_PageCount)
 	    {
-	    	File dir = new File(Resultpath);
+	    	File dir = new File(Resultpath+"\\"+TestCaseName+"\\");
 	        if (! dir.exists())
 	        {
 	            successful = dir.mkdir();
@@ -204,7 +204,7 @@ public class PDFUtilities {
 	           
 	        if (successful)
 	        {
-	          	pdfUtil.setImageDestinationPath(Resultpath);
+	          	pdfUtil.setImageDestinationPath(Resultpath+"\\"+TestCaseName+"\\");
 	    	    boolean isEqual=pdfUtil.compare(PDF1path, PDF2path, 1, Expected_PageCount, true, true);
 	   		    if(!isEqual)
 	   	        {

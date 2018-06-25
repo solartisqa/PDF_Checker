@@ -7,7 +7,6 @@ import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
 import com.itextpdf.text.DocumentException;
-import com.solartis.common.DBColoumnVerify;
 import com.solartis.common.DatabaseOperation;
 import com.solartis.test.Configuration.PropertiesHandle;
 import com.solartis.test.exception.DatabaseException;

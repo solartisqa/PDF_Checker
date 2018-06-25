@@ -88,7 +88,7 @@ public class StarrGLPDFChecker  extends DBColoumnVerify
     
     public void comparePDFS(LinkedHashMap<String, String> inputOutputrow, String ActualPDFPath, String ExpectedPDFPath, String ScreenShotPath) throws IOException
     {
-    	pdf.comparePDFVisually(ActualPDFPath, ExpectedPDFPath, ScreenShotPath);
+    	pdf.comparePDFVisually(ActualPDFPath, ExpectedPDFPath, ScreenShotPath,inputOutputrow.get("Testdata"));
     }
     
     public void checkPDFPageSizes(String filePath, double width, double height) throws IOException
