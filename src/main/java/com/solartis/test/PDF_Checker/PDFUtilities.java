@@ -1,5 +1,6 @@
 package com.solartis.test.PDF_Checker;
 
+import com.itextpdf.kernel.pdf.canvas.parser.listener.ILocationExtractionStrategy;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
@@ -34,6 +35,12 @@ import com.itextpdf.text.pdf.PdfDictionary;
 import com.itextpdf.text.pdf.PdfName;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.RandomAccessFileOrArray;
+import com.itextpdf.text.pdf.parser.FilteredTextRenderListener;
+import com.itextpdf.text.pdf.parser.LocationTextExtractionStrategy;
+import com.itextpdf.text.pdf.parser.PdfTextExtractor;
+import com.itextpdf.text.pdf.parser.RegionTextRenderFilter;
+import com.itextpdf.text.pdf.parser.RenderFilter;
+import com.itextpdf.text.pdf.parser.TextExtractionStrategy;
 
 import org.apache.commons.io.FileUtils;
 
@@ -406,19 +413,39 @@ public class PDFUtilities {
 	    column.setSimpleColumn(rect);
 	    return column.go();
 	}
+	
+	/*public String getFontName()
+	{
+		string curFont = renderInfo.GetFont().PostscriptFontName;
+		return curFont;
+	}*/
 
+	public String extractSpecificText(int pageNumber,float llx, float lly,float urx, float ury) throws IOException
+	{
+		//Rectangle mediabox = pdfReaderr.GetPageSize(pagenum);
+		Rectangle rectPage1 = new Rectangle(llx, lly, urx, ury);
+		RenderFilter[] filter = {new RegionTextRenderFilter(rectPage1)};
+		FilteredTextRenderListener strategy;
+		StringBuilder sb = new StringBuilder();
+		//for (int i = 1; i <= pdfReaderr.getNumberOfPages(); i++) {
+		    strategy =  new FilteredTextRenderListener( new LocationTextExtractionStrategy(), filter);
+		    sb.append(PdfTextExtractor.getTextFromPage(pdfReaderr, pageNumber, (TextExtractionStrategy) strategy));//GetTextFromPage(pdfReaderr, i, strategy));
+		//}
+		return sb.toString();
+	}
 	
 	public static void main(String[] args) throws IOException, DocumentException {
 		PDFUtilities trial1 = new PDFUtilities();
-/*		trial1.openPDF("Q:\\Manual Testing\\Starr\\Starr-GL\\FormsTemplate\\All Forms\\SIIL C 001 (0517) Starr Certificate of Commercial Liability Insurance.pdf", "Q:\\Manual Testing\\Starr\\Starr-GL\\FormsTemplate\\All Forms\\SIIL C 001 (0517) Starr Certificate of Commercial Liability Insurance_edited.pdf");
-		trial1.feedInData(1, 300, 600, 400, 600, "My trial text");
-		trial1.feedInData(2, 100, 200, 300, 300, "My trial text2");
-		trial1.closePDF();*/
+		trial1.openPDF("Q:\\Manual Testing\\Starr\\Starr-GL\\FormsTemplate\\All Forms\\SIIL DS 01 FL (0117) Common Policy Dec Page - Copy.pdf", "Q:\\Manual Testing\\Starr\\Starr-GL\\FormsTemplate\\All Forms\\SIIL C 001 (0517) Starr Certificate of Commercial Liability Insurance_edited.pdf");
+		//trial1.feedInData(1, 300, 600, 400, 600, "My trial text");
+		System.out.println(trial1.extractSpecificText(1, 300, 600, 400, 700));
+		//trial1.feedInData(2, 100, 200, 300, 300, "My trial text2");
+		trial1.closePDF();
 		//trial1.comparePDFVisually("Q:\\Manual Testing\\Starr\\Starr-GL\\FormsTemplate\\All Forms\\SIIL C 001 (0517) Starr Certificate of Commercial Liability Insurance.pdf",
 			//	"Q:\\Manual Testing\\Starr\\Starr-GL\\FormsTemplate\\All Forms\\SIIL C 001 (0517) Starr Certificate of Commercial Liability Insurance_edited.pdf",
 				//"Q:\\Manual Testing\\Starr\\Starr-GL\\FormsTemplate\\All Forms\\resutlt\\resutl\\");
 		//trial1.checkPageSize("E:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-GL\\PDFs\\PolicyPDF\\SampleTemplates\\SIIL-0001 (0115) Disclosure Pursuant to TRIA.pdf", 8.5, 11);
 		//trial1.removeBlankPdfPages("E:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-GL\\PDFs\\PolicyPDF\\SampleTemplates\\SIIL DS 04 (0117) Schedule of Named Insured.pdf", "E:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-GL\\PDFs\\PolicyPDF\\SampleTemplates\\SIIL DS 04 (0117) Schedule of Named Insured_temp.pdf", 5000);
-		trial1.manipulateSheduleofFormsPdf("E:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-GL\\PDFs\\PolicyPDF\\SampleTemplates\\SIIL DS 02 (0117) Schedule of Forms and Endorsements.pdf", "E:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-GL\\PDFs\\PolicyPDF\\SampleTemplates\\SIIL DS 02 (0117) Schedule of Forms and Endorsementstest.pdf");
+		//trial1.manipulateSheduleofFormsPdf("E:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-GL\\PDFs\\PolicyPDF\\SampleTemplates\\SIIL DS 02 (0117) Schedule of Forms and Endorsements.pdf", "E:\\RestFullAPIDeliverable\\Devolpement\\admin\\STARR-GL\\PDFs\\PolicyPDF\\SampleTemplates\\SIIL DS 02 (0117) Schedule of Forms and Endorsementstest.pdf");
 	}
 }
