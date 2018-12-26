@@ -1,6 +1,5 @@
 package com.solartis.test.PDF_Checker;
 
-import com.itextpdf.kernel.pdf.canvas.parser.listener.ILocationExtractionStrategy;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
@@ -44,7 +43,7 @@ import com.itextpdf.text.pdf.parser.TextExtractionStrategy;
 
 import org.apache.commons.io.FileUtils;
 
-public class PDFUtilities {
+public class PDFUtilities extends WordToWords{
 	private PdfReader pdfReaderr;
 	public PdfStamper pdfStampers;
 	public PdfReader pdfReaders;

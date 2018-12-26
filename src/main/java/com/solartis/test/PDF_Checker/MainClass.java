@@ -15,7 +15,7 @@ import com.solartis.test.exception.PropertiesHandleException;
 
 public class MainClass
 {
-	static StarrGLPDFChecker checkGL;
+	static CommercialAutoPDFChecker checkGL;
 	public static PropertiesHandle config; 
 	public static void main(String args[]) throws DatabaseException, PDFException
 	{
@@ -35,7 +35,7 @@ public class MainClass
 			String classname = "com.solartis.test.PDF_Checker."+config.getProperty("ClassName");
 			Class<?> cl = Class.forName(classname);
 			Constructor<?> cons = cl.getConstructor();
-			checkGL =  (StarrGLPDFChecker) cons.newInstance();			
+			checkGL =  (CommercialAutoPDFChecker) cons.newInstance();			
 			DatabaseOperation DB = new DatabaseOperation();
 			DatabaseOperation.ConnectionSetup(config);
 			System.out.println(config.getProperty("ProjectDBName"));
@@ -47,7 +47,12 @@ public class MainClass
 				if(inputOutputRow.get("Flag_for_execution").equals("Y"))
 				{
 					LinkedHashMap<Integer,SheduleOfFormsList> files=checkGL.loadListofForms(config,inputOutputRow);
-					checkGL.pumpDatatoForms(files, inputOutputRow,config,SampleTemplatePath,TempPath);
+					try 
+					{
+						checkGL.pumpDatatoForms(files, inputOutputRow,config,SampleTemplatePath,TempPath);
+					} catch (Exception e) {						
+						e.printStackTrace();
+					}
 					checkGL.mergeForms(files,ExpectedPDFPath+inputOutputRow.get("Testdata")+".pdf",TempPath);
 					checkGL.generateActualPDF(inputOutputRow,ActualPDFPath+inputOutputRow.get("Testdata")+".pdf");
 					checkGL.checkPDFPageSizes(ActualPDFPath+inputOutputRow.get("Testdata")+".pdf", 8.5, 11);
